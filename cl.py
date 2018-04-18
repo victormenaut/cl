@@ -1,40 +1,40 @@
 import nltk 
 import sys 
-import numpy 
+import numpy #pip3 install numpy
 from nltk.corpus import brown
 
 def count_tag(corpus):
-	count_tag = {}
-	for word,tag in corpus:
+	count_tag = {} 					#creates new dictionary 
+	for word,tag in corpus:			#goes through the key, value 
 
-		if word not in count_tag:
-			count_tag[word] = {} 
-		if tag not in count_tag[word]:
-			count_tag[word][tag] = 1
+		if word not in count_tag:	#adds words to the dictionary
+			count_tag[word] = {} 	# creates a dictionary as a value of each word
+		if tag not in count_tag[word]:	#if the tag is not in the dictionary 
+			count_tag[word][tag] = 1	# adds a count to each tag 
 		else:
-			count_tag[word][tag] += 1
-	return MLE_word_tag(count_tag)
+			count_tag[word][tag] += 1	# adds a count to each tag 
+	return MLE_word_tag(count_tag)	
 
 	
 def MLE_word_tag(dicts):
-	count_tag = dicts
-	total_words = len(count_tag)
-	prob_word = {} 
-	for word in count_tag:
-		count = 0
-		total_tag = 0
-		for tag in count_tag[word]:		#value of the tag count 
-			total_tag += count_tag[word][tag]
-		for tag in count_tag[word]:
-			count = count_tag[word][tag]
-			prob_tag = count/total_tag
-			count_tag[word][tag] = prob_tag
-		prob_word[word] = count/total_words
+	count_tag = dicts			 	#takes a dictionary with its key as a word and value as a tag with counts 
+	total_words = len(count_tag)	#total number of words is the len of the dictionary 
+	prob_word = {} 					#creates a new dictionary for the prob
+	for word in count_tag:			#goes through the dictionary word by word 
+		count = 0					#initialize a count 	
+		total_tag = 0				#inititalize total 
+		for tag in count_tag[word]:		#goes through the values of the tags of the words 
+			total_tag += count_tag[word][tag]	# adds counts of the tag to the total 
+		for tag in count_tag[word]:			# goes through the values of the tags of the words 
+			count = count_tag[word][tag]	# count is the count for each tag 
+			prob_tag = count/total_tag		# probability of the tag is count over total 
+			count_tag[word][tag] = prob_tag	# so the new value of the tag is the probability 
+		prob_word[word] = count/total_words	# probability of the word in reference to the total words 
 	prob_tag = count_tag
 
 	return prob_word, prob_tag
 
-def forwardprobs(observe, initial, trans, emis, numstates, observe_indices):
+'''def forwardprobs(observe, initial, trans, emis, numstates, observe_indices):
 	forwardmatrix = numpy.zeros((numstates, len(observe)))
 	obs_index = observe_indices[observe[0]]
 	for s in range(numstates):
@@ -79,7 +79,7 @@ def test_alphabeta():
     print('BACKWARD')
     print(backwardprobs(observations, trans, emis, numstates, obs_indices))
     print("\n")
-
+'''
 		
 
 
@@ -100,13 +100,13 @@ def unknown_tag(word,prev, dicts, tag):
 			post_tag[tags[1]] = 1
 		else:
 			post_tag[tags[1]] += 1
-	return (word + "/" +  max(post_tag, key =post_tag.get ))
+	return (word + "/" +  max(post_tag, key =post_tag.get))
 			
 			
 def main():
-	tag = brown.tagged_words()
+	tag = nltk.corpus.brown.tagged_words()
 	prob = count_tag(tag)
-	s = "this tagger is stupid"
+	s = "Her duck ducked"
 	a = s.split()
 	for i in range (len(a)):
 		if a[i] in prob[1]:
